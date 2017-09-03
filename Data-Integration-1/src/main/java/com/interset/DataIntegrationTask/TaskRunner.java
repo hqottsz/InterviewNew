@@ -104,22 +104,21 @@ public class TaskRunner {
 	             String line = linReader.nextLine();
 	             UserData user=new ObjectMapper().readValue(line, UserData.class);
 	             //process userData to update report and verify record can be logged into CSV file or not
-	             DrpRecord=process(user, report);
+	             //DrpRecord=process(user, report);
 	             
-	             if (DrpRecord==false){
+	             if (!process(user, report)){
 	            	 csvString=parserJsonString(user);
 	            	 csvfileWriter.append(csvString);
 	            	 csvfileWriter.append(newLine);
 	            	 
 	             }       
-	             System.out.println(csvString);
+	             //System.out.println(csvString);
 	         }
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch blockSystem.out
-			System.out.println("Error in file to read.");
+			System.out.println("Error in file to read:"+ e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e){
-			System.out.println("Error in cvs file to write.");
+			System.out.println("Error in cvs file to write: "+ e.getMessage());
 			e.printStackTrace();			
 		}
 		finally{
@@ -132,8 +131,7 @@ public class TaskRunner {
 					csvfileWriter.flush();
 					csvfileWriter.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					System.out.println("Error in cvs file to flush/close.");
+					System.out.println("Error in cvs file to flush/close: "+ e.getMessage());
 					e.printStackTrace();
 				}
 				
@@ -149,7 +147,7 @@ public class TaskRunner {
 			System.out.println("\n\n========================REPORT=======================================\n");
 			System.out.println(reportInjson);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error in printout report: "+ e.getMessage());
 			e.printStackTrace();
 		} 
 		
@@ -174,7 +172,7 @@ public class TaskRunner {
 		
     }
     	
-  //This method is to verify wether record should be dropped or not; and also update report
+  //This method is to verify whether record should be dropped or not; and update report accordingly
     public static boolean process(UserData userdata, Report report){
     	boolean drop=false;
     	
@@ -230,7 +228,6 @@ public class TaskRunner {
     		try {
 				startDate=new SimpleDateFormat("MM/dd/yyyy hh:mm:ssa").parse(userdata.getTimestamp());
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
     		report.setStartDate(report.convertDate(userdata.getTimestamp()));
@@ -240,7 +237,6 @@ public class TaskRunner {
     		try {
 				endDate=new SimpleDateFormat("MM/dd/yyyy hh:mm:ssa").parse(userdata.getTimestamp());
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
     		report.setEndDate(report.convertDate(userdata.getTimestamp()));    		
@@ -253,7 +249,6 @@ public class TaskRunner {
     	try {
 			newDate=new SimpleDateFormat("MM/dd/yyyy hh:mm:ssa").parse(userdata.getTimestamp());
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	
