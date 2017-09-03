@@ -122,7 +122,7 @@ public class TaskRunner {
 			e.printStackTrace();			
 		}
 		finally{
-			System.out.println("In finial");
+			//System.out.println("In finial");
 			if 	(linReader!=null){
 				linReader.close();
 			}
